@@ -1,0 +1,93 @@
+<div class="content">
+    <div class="card-container">
+        <div class="card" tabindex="0">
+            <div class="header">Add Person</div>
+            <mat-slide-toggle class="row" [checked]="isSettleUp"
+                (change)="isSettleUp = !isSettleUp">
+                Is Settle Up?
+            </mat-slide-toggle>
+            <form class="p-t-10" [formGroup]="expenseForm" (ngSubmit)="onSubmit($event)">
+                <mat-form-field class="m-r-10">
+                    <input matInput type="number" formControlName="amount" class="form-control" placeholder="Amount">
+                    <!-- <mat-error *ngIf="expenseForm.amount.hasError('required')">
+                        Name is <strong>required.</strong>
+                    </mat-error>
+                    <mat-error *ngIf="expenseForm.amount.hasError('pattern')">
+                        Please enter only <strong>alphabetical letters.</strong>
+                    </mat-error> -->
+                </mat-form-field>
+                <mat-form-field class="m-r-10">
+                    <input type="text" matInput formControlName="paidBy" [matAutocomplete]="auto" placeholder="By">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                        <mat-option *ngIf="isLoading" class="is-loading">
+                            <mat-spinner diameter="50"></mat-spinner>
+                        </mat-option>
+                        <ng-container *ngIf="!isLoading">
+                            <mat-option *ngFor="let user of paidByUsers" [value]="user">
+                                <span>{{ user }}</span>
+                            </mat-option>
+                        </ng-container>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field class="example-chip-list row">
+                    <mat-chip-list #chipList>
+                        <mat-chip *ngFor="let person of persons" [selectable]="true" [removable]="true" 
+                            (removed)="remove(person)">
+                            {{person}}
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip>
+                        <input placeholder="{{isSettleUp ? 'To' : 'With'}}" #withInput formControlName="with" class="form-control"
+                            [matAutocomplete]="autoForWith" [matChipInputFor]="chipList" [matChipInputAddOnBlur]="true"
+                            (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-list>
+                    <mat-autocomplete #autoForWith="matAutocomplete" (optionSelected)="selected($event)">
+                        <mat-option *ngFor="let user of withUsers" [value]="user">
+                            {{user}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <div class="p-t-10">
+                    <button mat-raised-button color="primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div>
+        <mat-table [dataSource]="transactions" class="mat-elevation-z8">
+
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="amount">
+                <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.amount}} </mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="by">
+                <mat-header-cell *matHeaderCellDef> By </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.by}} </mat-cell>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="withPeople">
+                <mat-header-cell *matHeaderCellDef> With </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{(element.withPeople || []).join(', ')}} </mat-cell>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="toPerson">
+                <mat-header-cell *matHeaderCellDef> To </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.toPerson}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="isSettleUp">
+                <mat-header-cell *matHeaderCellDef> Settle Up </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.isSettleUp}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+    </div>
+</div>

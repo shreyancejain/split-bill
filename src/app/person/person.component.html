@@ -1,0 +1,30 @@
+<div class="content">
+    <div class="card-container">
+        <div class="card highlight-card">
+            <h2>{{person.name}} Balance Details</h2>
+        </div>
+    </div>
+    <div>
+        <mat-list>
+            <h3>Balance Details</h3>
+            <div class="p-t-10" *ngIf="(person.oweFrom | json) === '{}'">{{person.name | uppercase}} have no
+                transaction.</div>
+            <mat-list-item class="row" *ngFor="let item of person.oweFrom | keyvalue">
+                <div *ngIf="item.value" class="list-row">
+                    <span *ngIf="item.value > 0; then thenBlock else elseBlock"></span>
+                    <ng-template #thenBlock>
+                        <span class="m-r-10">{{person.name}} owe {{item.value}} from {{item.key}}</span>
+                        <a mat-raised-button [routerLink]="['/balance-sheet']"
+                            [queryParams]="{amount: item.value, by: person.name, to: item.key, isSettleUp: true}">
+                            Settle Up
+                        </a>
+                    </ng-template>
+                    <ng-template #elseBlock><span class="m-r-10">{{person.name}} lent {{0 - item.value}} to {{item.key}}</span></ng-template>
+
+                </div>
+                <div *ngIf="!item.value">{{person.name}} have no un-settled balances</div>
+            </mat-list-item>
+        </mat-list>
+    </div>
+
+</div>

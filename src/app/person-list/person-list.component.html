@@ -1,0 +1,33 @@
+<div class="content">
+    <div class="card-container">
+        <div class="card" tabindex="0">
+            <div class="header">Add Person</div>
+            <form (ngSubmit)="onSubmit()">
+                <mat-form-field>
+                    <input matInput placeholder="Name" [formControl]="personFormControl" [errorStateMatcher]="matcher">
+                    <mat-error *ngIf="personFormControl.hasError('required')">
+                        Name is <strong>required.</strong>
+                    </mat-error>
+                    <mat-error *ngIf="personFormControl.hasError('pattern')">
+                        Please enter only <strong>alphabetical letters.</strong>
+                    </mat-error>
+                </mat-form-field>
+                <div class="p-t-10">
+                    <button mat-raised-button color="primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div>
+        <mat-list>
+            <h3>Added People</h3>
+            <mat-list-item *ngFor="let person of peopleList">
+                <h4 mat-line>{{person.name}}</h4>
+                <a mat-raised-button [routerLink]="['/person', person.name]">
+                    Details
+                </a>
+            </mat-list-item>
+        </mat-list>
+    </div>
+
+</div>
