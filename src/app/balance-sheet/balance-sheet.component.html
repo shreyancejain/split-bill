@@ -55,7 +55,8 @@
             </form>
         </div>
     </div>
-    <div>
+    <div *ngIf="transactions.length">
+        <h3>Balance Details</h3>
         <mat-table [dataSource]="transactions" class="mat-elevation-z8">
 
             <!--- Note that these columns can be defined in any order.

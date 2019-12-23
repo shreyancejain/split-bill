@@ -18,7 +18,7 @@
             </form>
         </div>
     </div>
-    <div>
+    <div *ngIf="peopleList.length">
         <mat-list>
             <h3>Added People</h3>
             <mat-list-item *ngFor="let person of peopleList">
