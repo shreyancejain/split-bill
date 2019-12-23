@@ -3,7 +3,7 @@
         <div class="card" tabindex="0">
             <div class="header">Add Person</div>
             <mat-slide-toggle class="row" [checked]="isSettleUp"
-                (change)="isSettleUp = !isSettleUp">
+                (change)="toggleTransactionType()">
                 Is Settle Up?
             </mat-slide-toggle>
             <form class="p-t-10" [formGroup]="expenseForm" (ngSubmit)="onSubmit($event)">
@@ -36,7 +36,7 @@
                             {{person}}
                             <mat-icon matChipRemove>cancel</mat-icon>
                         </mat-chip>
-                        <input placeholder="{{isSettleUp ? 'To' : 'With'}}" #withInput formControlName="with" class="form-control"
+                        <input [attr.disabled]="(isSettleUp && persons.length) ? '' : null" placeholder="{{isSettleUp ? 'To' : 'With'}}" #withInput formControlName="with" class="form-control"
                             [matAutocomplete]="autoForWith" [matChipInputFor]="chipList" [matChipInputAddOnBlur]="true"
                             (matChipInputTokenEnd)="add($event)">
                     </mat-chip-list>

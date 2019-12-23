@@ -85,6 +85,11 @@ export class BalanceSheetComponent implements OnInit {
       });
   }
 
+  toggleTransactionType(){
+    this.isSettleUp = !this.isSettleUp;
+    this.persons = [];
+  }
+
   getAllTransactions() {
     this.appService.getAllTransactions()
       .subscribe(
@@ -114,18 +119,22 @@ export class BalanceSheetComponent implements OnInit {
     if (this.matAutocomplete.isOpen) {
       return;
     }
+    
     const input = event.input;
     const value = event.value;
+    if (input) {
+      input.value = '';
+    }
+    this.expenseForm.get('with').setValue('');
+
+    if (this.isSettleUp && this.persons.length) {
+      return;
+    }
 
     let person = this.appService.getPerson((value || '').trim())
     if (person) {
       this.persons.push(person.name);
     }
-
-    if (input) {
-      input.value = '';
-    }
-    this.expenseForm.get('with').setValue('');
   }
 
   remove(fruit: string): void {
@@ -137,9 +146,13 @@ export class BalanceSheetComponent implements OnInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.persons.push(event.option.viewValue);
+    let val = event.option.viewValue;
     this.withInput.nativeElement.value = '';
     this.expenseForm.get('with').setValue('');
+    if (this.isSettleUp && this.persons.length) {
+      return;
+    }
+    this.persons.push(val);
   }
 
 }
