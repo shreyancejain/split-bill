@@ -25,7 +25,7 @@ export class BalanceSheetComponent implements OnInit {
   filteredUsers: any;
   paidByUsers: any;
   withUsers: any;
-  persons: any = [];
+  persons: string[] = [];
   transactions: any = [];
   displayedColumns: string[] = ['amount', 'by', 'withPeople', 'toPerson', 'isSettleUp'];
 
@@ -57,7 +57,7 @@ export class BalanceSheetComponent implements OnInit {
       .pipe(
         debounceTime(300),
         tap(() => this.isLoading = true),
-        switchMap(value => this.appService.searchPerson(value)
+        switchMap(value => this.appService.searchPerson(value, this.persons)
           .pipe(
             finalize(() => {
               this.isLoading = false
@@ -74,7 +74,8 @@ export class BalanceSheetComponent implements OnInit {
       .pipe(
         debounceTime(300),
         tap(() => this.isLoading = true),
-        switchMap(value => this.appService.searchPerson(value)
+        switchMap(value => this.appService.searchPerson(value, [this.expenseForm
+          .get('paidBy').value, ...this.persons])
           .pipe(
             finalize(() => {
               this.isLoading = false

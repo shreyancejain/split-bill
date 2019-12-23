@@ -29,6 +29,9 @@ export class PersonListComponent implements OnInit {
   public peopleList:any;
 
   onSubmit() {
+    if (this.personFormControl.invalid) {
+      return;
+    }
     this.appService.addPerson(this.personFormControl.value).subscribe(
       res => {
         this.getPeopleList();

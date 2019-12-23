@@ -59,15 +59,14 @@ export class AppService {
     this.personsObject[toPerson].oweFrom[by] += amount;
   }
 
-  searchPerson(str: string, excludePerson?: string) {
+  searchPerson(str: string, excludePerson?: string[]) {
     if (!str) {
       return of([]);
     }
     str = str.toUpperCase();
-    excludePerson = (excludePerson || '').toUpperCase();
     return of(Object.keys(this.personsObject)).pipe(
       map(people => people.filter(person => {
-        return person.match(new RegExp('.*' + str + '.*')) && (person !== excludePerson)
+        return person.match(new RegExp('.*' + str + '.*')) && !excludePerson.some(excludePerson => excludePerson.toUpperCase() === person)
       }))
     );
   }
