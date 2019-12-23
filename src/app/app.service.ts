@@ -15,14 +15,14 @@ export class AppService {
     }
   } = {};
 
-  private balances: [{
+  private balances: {
     amount: number,
     // description: string,
     by: string,
     withPeople?: string[],
     toPerson?: string,
     isSettleUp: boolean
-  }?] = [];
+  }[] = [];
 
   constructor() { }
 
@@ -39,6 +39,12 @@ export class AppService {
   }
 
   addExpense(amount: number, by: string, withPeople: string[]) {
+    if (!amount || !this.isPersonExist(by) || !this.isPeopleExist(withPeople)) {
+      return 'Missing or invalid parameters';
+    }
+    if (withPeople.includes(by)) {
+      return 'Invalid parameters';
+    }
     let equalShare = Number((amount / (withPeople.length + 1)).toFixed(2));
     withPeople.forEach((person) => {
       this.setOweFrom(equalShare, by, person);
@@ -47,11 +53,19 @@ export class AppService {
   }
 
   settleUpBalance(amount: number, by: string, toPerson: string) {
+    if (!amount || !this.isPersonExist(by) || !this.isPersonExist(toPerson)) {
+      return 'Missing or invalid parameters';
+    }
+    by = by.trim();
+    toPerson = toPerson.trim();
+    if (by === toPerson) {
+      return 'Invalid parameters';
+    }
     this.setOweFrom(amount, by, toPerson);
     this.balances.push({ amount, by, toPerson, isSettleUp: true })
   }
 
-  setOweFrom(amount: number, by: string, toPerson: string) {
+  private setOweFrom(amount: number, by: string, toPerson: string) {
     this.personsObject[by].oweFrom[toPerson] = this.personsObject[by].oweFrom[toPerson] || 0;
     this.personsObject[by].oweFrom[toPerson] -= amount;
 
@@ -64,9 +78,10 @@ export class AppService {
       return of([]);
     }
     str = str.toUpperCase();
+    excludePerson = excludePerson || [];
     return of(Object.keys(this.personsObject)).pipe(
       map(people => people.filter(person => {
-        return person.match(new RegExp('.*' + str + '.*')) && !excludePerson.some(excludePerson => excludePerson.toUpperCase() === person)
+        return person.match(new RegExp('.*' + str + '.*')) && !excludePerson.some(excludePerson => excludePerson.trim().toUpperCase() === person)
       }))
     );
   }
@@ -75,7 +90,7 @@ export class AppService {
     if (!name) {
       return;
     }
-    name = name.toUpperCase();
+    name = name.trim().toUpperCase();
     return this.personsObject[name];
   }
 
@@ -84,8 +99,12 @@ export class AppService {
   }
 
   isPersonExist(name: string) {
-    name = name.toUpperCase();
+    name = (name || '').toUpperCase();
     return Boolean(this.personsObject[name]);
+  }
+
+  isPeopleExist(name: string[]) {
+    return Boolean(name && name.length && !name.some(name => !this.isPersonExist(name)));
   }
 
   getAllTransactions() {
