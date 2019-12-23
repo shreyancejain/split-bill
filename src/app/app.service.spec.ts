@@ -48,7 +48,7 @@ describe('AppService', () => {
     people.forEach(person => service.addPerson(person));
 
     const errResp = service.addExpense(amount, byPerson, people);
-    expect(errResp).toEqual('Missing or invalid parameters')
+    expect(errResp).toEqual('Missing or invalid parameters');
   });
 
   it('should return error Invalid', () => {
@@ -58,7 +58,7 @@ describe('AppService', () => {
     const amount = 200;
 
     const errResp = service.addExpense(amount, byPerson, people);
-    expect(errResp).toEqual('Invalid parameters')
+    expect(errResp).toEqual('Invalid parameters');
   });
 
   it('should add settlement', (done: DoneFn) => {
