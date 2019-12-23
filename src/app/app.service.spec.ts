@@ -16,19 +16,19 @@ describe('AppService', () => {
   });
 
   it('should add person', () => {
-    let personName = 'ROHIT';
+    const personName = 'ROHIT';
     // * act
     service.addPerson(personName);
-    
+
     // * assert
     expect(service.getPerson(personName).name).toBe(personName);
   });
 
   it('should add expanse', (done: DoneFn) => {
-    let people = ['ROHIT', 'RAHUL', 'SHREYANCE'];
-    people.forEach(person => service.addPerson(person))
-    let byPerson = people.shift();
-    let amount = 200;
+    const people = ['ROHIT', 'RAHUL', 'SHREYANCE'];
+    people.forEach(person => service.addPerson(person));
+    const byPerson = people.shift();
+    const amount = 200;
 
     service.addExpense(amount, byPerson, people);
 

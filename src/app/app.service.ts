@@ -29,13 +29,13 @@ export class AppService {
   addPerson(name) {
     name = name.toUpperCase();
     if (this.personsObject[name]) {
-      return throwError("Person already Added");
+      return throwError('Person already Added');
     }
     this.personsObject[name] = {
-      name: name,
+      name,
       oweFrom: {}
-    }
-    return of("Person Added Successfully");
+    };
+    return of('Person Added Successfully');
   }
 
   addExpense(amount: number, by: string, withPeople: string[]) {
@@ -45,11 +45,11 @@ export class AppService {
     if (withPeople.includes(by)) {
       return 'Invalid parameters';
     }
-    let equalShare = Number((amount / (withPeople.length + 1)).toFixed(2));
+    const equalShare = Number((amount / (withPeople.length + 1)).toFixed(2));
     withPeople.forEach((person) => {
       this.setOweFrom(equalShare, by, person);
     });
-    this.balances.push({ amount, by, withPeople, isSettleUp: false })
+    this.balances.push({ amount, by, withPeople, isSettleUp: false });
   }
 
   settleUpBalance(amount: number, by: string, toPerson: string) {
@@ -62,7 +62,7 @@ export class AppService {
       return 'Invalid parameters';
     }
     this.setOweFrom(amount, by, toPerson);
-    this.balances.push({ amount, by, toPerson, isSettleUp: true })
+    this.balances.push({ amount, by, toPerson, isSettleUp: true });
   }
 
   private setOweFrom(amount: number, by: string, toPerson: string) {
@@ -73,15 +73,15 @@ export class AppService {
     this.personsObject[toPerson].oweFrom[by] += amount;
   }
 
-  searchPerson(str: string, excludePerson?: string[]) {
+  searchPerson(str: string, excludePeople?: string[]) {
     if (!str) {
       return of([]);
     }
     str = str.toUpperCase();
-    excludePerson = excludePerson || [];
+    excludePeople = excludePeople || [];
     return of(Object.keys(this.personsObject)).pipe(
       map(people => people.filter(person => {
-        return person.match(new RegExp('.*' + str + '.*')) && !excludePerson.some(excludePerson => excludePerson.trim().toUpperCase() === person)
+        return person.match(new RegExp('.*' + str + '.*')) && !excludePeople.some(excludePerson => excludePerson.trim().toUpperCase() === person);
       }))
     );
   }
@@ -103,8 +103,8 @@ export class AppService {
     return Boolean(this.personsObject[name]);
   }
 
-  isPeopleExist(name: string[]) {
-    return Boolean(name && name.length && !name.some(name => !this.isPersonExist(name)));
+  isPeopleExist(names: string[]) {
+    return Boolean(names && names.length && !names.some(name => !this.isPersonExist(name)));
   }
 
   getAllTransactions() {

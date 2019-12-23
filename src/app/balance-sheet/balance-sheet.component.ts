@@ -21,7 +21,7 @@ export class BalanceSheetComponent implements OnInit {
 
   expenseForm: FormGroup;
   isLoading: boolean;
-  isSettleUp: boolean = false;
+  isSettleUp = false;
   filteredUsers: any;
   paidByUsers: any;
   withUsers: any;
@@ -33,24 +33,23 @@ export class BalanceSheetComponent implements OnInit {
 
 
   ngOnInit(): void {
-    let queryParams = this.route.snapshot.queryParams;
+    const queryParams = this.route.snapshot.queryParams;
     this.isSettleUp = !!queryParams.isSettleUp;
-    let by: any = this.appService.getPerson((queryParams.by || '').trim())
-    by = by ? by.name : ''
-    let to = this.appService.getPerson((queryParams.to || '').trim())
+    let by: any = this.appService.getPerson((queryParams.by || '').trim());
+    by = by ? by.name : '';
+    const to = this.appService.getPerson((queryParams.to || '').trim());
     if (to) {
       this.persons.push(to.name);
     }
 
     this.expenseForm = this.formBuilder.group({
-      'amount': [Number(queryParams.amount) || '', [Validators.required, Validators.min(1)]],
-      'paidBy': [by, Validators.required],
-      'withPersons': [this.persons, [this.validateArrayNotEmpty]],
-      'with': ['']
-      // 'description': ['']
+      amount: [Number(queryParams.amount) || '', [Validators.required, Validators.min(1)]],
+      paidBy: [by, Validators.required],
+      withPersons: [this.persons, [this.validateArrayNotEmpty]],
+      with: ['']
     });
 
-    this.getAllTransactions()
+    this.getAllTransactions();
     this.expenseForm
       .get('paidBy')
       .valueChanges
@@ -60,12 +59,12 @@ export class BalanceSheetComponent implements OnInit {
         switchMap(value => this.appService.searchPerson(value, this.persons)
           .pipe(
             finalize(() => {
-              this.isLoading = false
+              this.isLoading = false;
             }),
           )
         )
       ).subscribe((users: any) => {
-        this.paidByUsers = users
+        this.paidByUsers = users;
       });
 
     this.expenseForm
@@ -78,25 +77,25 @@ export class BalanceSheetComponent implements OnInit {
           .get('paidBy').value, ...this.persons])
           .pipe(
             finalize(() => {
-              this.isLoading = false
+              this.isLoading = false;
             }),
           )
         )
       ).subscribe((users: any) => {
-        this.withUsers = users
+        this.withUsers = users;
       });
   }
 
   validateArrayNotEmpty(c: FormControl) {
     if (c.value && c.value.length === 0) {
-      return { 
+      return {
         validateArrayNotEmpty: { valid: false }
       };
     }
     return null;
   }
 
-  toggleTransactionType(){
+  toggleTransactionType() {
     this.isSettleUp = !this.isSettleUp;
     this.persons = [];
   }
@@ -110,7 +109,7 @@ export class BalanceSheetComponent implements OnInit {
       );
   }
 
-  validatePerson(input){
+  validatePerson(input) {
     const value = (input.value || '').trim();
     if (!this.appService.isPersonExist(value)) {
       input.value = '';
@@ -118,18 +117,18 @@ export class BalanceSheetComponent implements OnInit {
   }
 
   onSubmit(event) {
-    this.expenseForm.controls['withPersons'].markAsTouched();
+    this.expenseForm.controls.withPersons.markAsTouched();
     if (this.expenseForm.invalid) {
       return;
     }
 
-    let valueObject = this.expenseForm.value
+    const valueObject = this.expenseForm.value;
     if (this.isSettleUp) {
-      this.appService.settleUpBalance(valueObject.amount, valueObject.paidBy, this.persons[0])
+      this.appService.settleUpBalance(valueObject.amount, valueObject.paidBy, this.persons[0]);
     } else {
-      this.appService.addExpense(valueObject.amount, valueObject.paidBy, this.persons)
+      this.appService.addExpense(valueObject.amount, valueObject.paidBy, this.persons);
     }
-    event.currentTarget.reset()
+    event.currentTarget.reset();
     this.persons = [];
     this.getAllTransactions();
   }
@@ -138,7 +137,7 @@ export class BalanceSheetComponent implements OnInit {
     if (this.matAutocomplete.isOpen) {
       return;
     }
-    
+
     const input = event.input;
     const value = event.value;
     if (input) {
@@ -150,11 +149,11 @@ export class BalanceSheetComponent implements OnInit {
       return;
     }
 
-    let person = this.appService.getPerson((value || '').trim())
+    const person = this.appService.getPerson((value || '').trim());
     if (person) {
       this.persons.push(person.name);
-      this.expenseForm.controls['withPersons'].setValue(this.persons);
-      this.expenseForm.controls['withPersons'].markAsDirty();
+      this.expenseForm.controls.withPersons.setValue(this.persons);
+      this.expenseForm.controls.withPersons.markAsDirty();
     }
   }
 
@@ -163,21 +162,21 @@ export class BalanceSheetComponent implements OnInit {
 
     if (index >= 0) {
       this.persons.splice(index, 1);
-      this.expenseForm.controls['withPersons'].setValue(this.persons);
-      this.expenseForm.controls['withPersons'].markAsDirty();
+      this.expenseForm.controls.withPersons.setValue(this.persons);
+      this.expenseForm.controls.withPersons.markAsDirty();
     }
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    let val = event.option.viewValue;
+    const val = event.option.viewValue;
     this.withInput.nativeElement.value = '';
     this.expenseForm.get('with').setValue('');
     if (this.isSettleUp && this.persons.length) {
       return;
     }
     this.persons.push(val);
-    this.expenseForm.controls['withPersons'].setValue(this.persons);
-    this.expenseForm.controls['withPersons'].markAsDirty();
+    this.expenseForm.controls.withPersons.setValue(this.persons);
+    this.expenseForm.controls.withPersons.markAsDirty();
   }
 
 }

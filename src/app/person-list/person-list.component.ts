@@ -26,7 +26,7 @@ export class PersonListComponent implements OnInit {
   ]);
 
   matcher = new MyErrorStateMatcher();
-  public peopleList:any;
+  public peopleList: any;
 
   onSubmit() {
     if (this.personFormControl.invalid) {
@@ -37,30 +37,30 @@ export class PersonListComponent implements OnInit {
         this.getPeopleList();
         this.personFormControl.reset();
         this.personFormControl.setErrors(null);
-        console.log('Person Added', res)
+        console.log('Person Added', res);
       },
       err => {
-        this.openSnackBar(err)
+        this.openSnackBar(err);
       }
     );
   }
 
   openSnackBar(message: string) {
-    let config = new MatSnackBarConfig();
+    const config = new MatSnackBarConfig();
     config.panelClass = ['alert-error'];
-    config.verticalPosition = 'top'
-    config.duration = 1000
-    this._snackBar.open(message, undefined, config);
+    config.verticalPosition = 'top';
+    config.duration = 1000;
+    this.snackBar.open(message, undefined, config);
   }
 
-  constructor(private appService: AppService, private _snackBar: MatSnackBar) { }
+  constructor(private appService: AppService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.getPeopleList();
   }
 
-  getPeopleList (){
-    this.peopleList = this.appService.getPeopleList()
+  getPeopleList() {
+    this.peopleList = this.appService.getPeopleList();
   }
 
 }

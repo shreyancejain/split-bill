@@ -8,7 +8,7 @@ import { BalanceSheetComponent } from './balance-sheet/balance-sheet.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PersonListComponent } from './person-list/person-list.component'; // <== add the imports!
+import { PersonListComponent } from './person-list/person-list.component';
 import {MatInputModule, MatTableModule, MatSelectModule, MatChipsModule, MatIconModule, MatAutocompleteModule, MatButtonModule, MatSnackBarModule, MatListModule, MatProgressSpinnerModule, MatSlideToggleModule} from '@angular/material';
 
 
@@ -39,7 +39,7 @@ import {MatInputModule, MatTableModule, MatSelectModule, MatChipsModule, MatIcon
     FormsModule,
     ReactiveFormsModule
   ],
-  
+
   providers: [],
   bootstrap: [AppComponent]
 })
