@@ -6,10 +6,10 @@
                 <mat-form-field>
                     <input matInput placeholder="Name" [formControl]="personFormControl" [errorStateMatcher]="matcher">
                     <mat-error *ngIf="personFormControl.hasError('required')">
-                        Name is <strong>required.</strong>
+                        Name is required.
                     </mat-error>
                     <mat-error *ngIf="personFormControl.hasError('pattern')">
-                        Please enter only <strong>alphabetical letters.</strong>
+                        Please enter only alphabetical letters.
                     </mat-error>
                 </mat-form-field>
                 <div class="p-t-10">

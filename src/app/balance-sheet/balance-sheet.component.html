@@ -9,15 +9,12 @@
             <form class="p-t-10" [formGroup]="expenseForm" (ngSubmit)="onSubmit($event)">
                 <mat-form-field class="m-r-10">
                     <input matInput type="number" formControlName="amount" class="form-control" placeholder="Amount">
-                    <!-- <mat-error *ngIf="expenseForm.amount.hasError('required')">
-                        Name is <strong>required.</strong>
+                    <mat-error *ngIf="expenseForm.controls.amount.errors?.required">
+                        Amount is required.
                     </mat-error>
-                    <mat-error *ngIf="expenseForm.amount.hasError('pattern')">
-                        Please enter only <strong>alphabetical letters.</strong>
-                    </mat-error> -->
                 </mat-form-field>
                 <mat-form-field class="m-r-10">
-                    <input type="text" matInput formControlName="paidBy" [matAutocomplete]="auto" placeholder="By">
+                    <input type="text" #byPerson matInput formControlName="paidBy" [matAutocomplete]="auto" placeholder="By" (blur)="validatePerson(byPerson)">
                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                         <mat-option *ngIf="isLoading" class="is-loading">
                             <mat-spinner diameter="50"></mat-spinner>
@@ -28,9 +25,12 @@
                             </mat-option>
                         </ng-container>
                     </mat-autocomplete>
+                    <mat-error *ngIf="expenseForm.controls.paidBy.errors?.required">
+                        By is required.
+                    </mat-error>
                 </mat-form-field>
                 <mat-form-field class="example-chip-list row">
-                    <mat-chip-list #chipList>
+                    <mat-chip-list #chipList ngDefaultControl [formControl]="expenseForm.controls.withPersons">
                         <mat-chip *ngFor="let person of persons" [selectable]="true" [removable]="true" 
                             (removed)="remove(person)">
                             {{person}}
@@ -45,6 +45,9 @@
                             {{user}}
                         </mat-option>
                     </mat-autocomplete>
+                    <mat-error *ngIf="expenseForm.controls.withPersons.errors?.validateArrayNotEmpty">
+                        With is required.
+                    </mat-error>
                 </mat-form-field>
                 <div class="p-t-10">
                     <button mat-raised-button color="primary">Add</button>

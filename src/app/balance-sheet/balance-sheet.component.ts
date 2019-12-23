@@ -43,9 +43,10 @@ export class BalanceSheetComponent implements OnInit {
     }
 
     this.expenseForm = this.formBuilder.group({
-      'amount': [Number(queryParams.amount), [Validators.required, Validators.min(1)]],
+      'amount': [Number(queryParams.amount) || '', [Validators.required, Validators.min(1)]],
       'paidBy': [by, Validators.required],
-      'with': [''],
+      'withPersons': [this.persons, [this.validateArrayNotEmpty]],
+      'with': ['']
       // 'description': ['']
     });
 
@@ -85,6 +86,15 @@ export class BalanceSheetComponent implements OnInit {
       });
   }
 
+  validateArrayNotEmpty(c: FormControl) {
+    if (c.value && c.value.length === 0) {
+      return { 
+        validateArrayNotEmpty: { valid: false }
+      };
+    }
+    return null;
+  }
+
   toggleTransactionType(){
     this.isSettleUp = !this.isSettleUp;
     this.persons = [];
@@ -99,7 +109,15 @@ export class BalanceSheetComponent implements OnInit {
       );
   }
 
+  validatePerson(input){
+    const value = (input.value || '').trim();
+    if (!this.appService.isPersonExist(value)) {
+      input.value = '';
+    }
+  }
+
   onSubmit(event) {
+    this.expenseForm.controls['withPersons'].markAsTouched();
     if (this.expenseForm.invalid) {
       return;
     }
@@ -134,14 +152,18 @@ export class BalanceSheetComponent implements OnInit {
     let person = this.appService.getPerson((value || '').trim())
     if (person) {
       this.persons.push(person.name);
+      this.expenseForm.controls['withPersons'].setValue(this.persons);
+      this.expenseForm.controls['withPersons'].markAsDirty();
     }
   }
 
-  remove(fruit: string): void {
-    const index = this.persons.indexOf(fruit);
+  remove(person: string): void {
+    const index = this.persons.indexOf(person);
 
     if (index >= 0) {
       this.persons.splice(index, 1);
+      this.expenseForm.controls['withPersons'].setValue(this.persons);
+      this.expenseForm.controls['withPersons'].markAsDirty();
     }
   }
 
@@ -153,6 +175,8 @@ export class BalanceSheetComponent implements OnInit {
       return;
     }
     this.persons.push(val);
+    this.expenseForm.controls['withPersons'].setValue(this.persons);
+    this.expenseForm.controls['withPersons'].markAsDirty();
   }
 
 }
