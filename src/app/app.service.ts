@@ -19,7 +19,7 @@ export class AppService {
     amount: number,
     // description: string,
     by: string,
-    withPeople?: [string],
+    withPeople?: string[],
     toPerson?: string,
     isSettleUp: boolean
   }?] = [];
@@ -38,7 +38,7 @@ export class AppService {
     return of("Person Added Successfully");
   }
 
-  addExpense(amount: number, by: string, withPeople: [string]) {
+  addExpense(amount: number, by: string, withPeople: string[]) {
     let equalShare = Number((amount / (withPeople.length + 1)).toFixed(2));
     withPeople.forEach((person) => {
       this.setOweFrom(equalShare, by, person);
