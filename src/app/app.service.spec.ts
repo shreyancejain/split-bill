@@ -41,6 +41,26 @@ describe('AppService', () => {
     });
   });
 
+  it('should return error Missing or Invalid', () => {
+    const people = ['ROHIT', 'RAHUL', 'SHREYANCE'];
+    const byPerson = people.shift();
+    const amount = 200;
+    people.forEach(person => service.addPerson(person));
+
+    const errResp = service.addExpense(amount, byPerson, people);
+    expect(errResp).toEqual('Missing or invalid parameters')
+  });
+
+  it('should return error Invalid', () => {
+    const people = ['ROHIT', 'RAHUL', 'SHREYANCE'];
+    people.forEach(person => service.addPerson(person));
+    const byPerson = people[0];
+    const amount = 200;
+
+    const errResp = service.addExpense(amount, byPerson, people);
+    expect(errResp).toEqual('Invalid parameters')
+  });
+
   it('should add settlement', (done: DoneFn) => {
     const people = ['ROHIT', 'RAHUL'];
     people.forEach(person => service.addPerson(person));
@@ -55,6 +75,20 @@ describe('AppService', () => {
       expect(transactions[0].amount).toBe(amount);
       expect(transactions[0].toPerson).toEqual(people[0]);
       expect(transactions[0].isSettleUp).toBeTruthy();
+      done();
+    });
+  });
+
+
+
+  it('should search user', (done: DoneFn) => {
+    const people = ['ROHIT', 'RAHUL', 'RAJ'];
+    people.forEach(person => service.addPerson(person));
+
+    const addedTransactions = service.searchPerson('A', ['RAJ']); // get an Observable
+    addedTransactions.subscribe(transactions => {
+      expect(transactions.length).toEqual(1);
+      expect(transactions[0]).toEqual('RAHUL');
       done();
     });
   });
