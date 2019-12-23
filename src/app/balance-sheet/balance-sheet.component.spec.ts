@@ -13,7 +13,15 @@ describe('BalanceSheetComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule, BrowserAnimationsModule, MatAutocompleteModule, MatChipsModule, MatTableModule],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        RouterTestingModule,
+        BrowserAnimationsModule,
+        MatAutocompleteModule,
+        MatChipsModule,
+        MatTableModule
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [BalanceSheetComponent]
     })

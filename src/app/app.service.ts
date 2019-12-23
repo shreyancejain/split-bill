@@ -81,7 +81,9 @@ export class AppService {
     excludePeople = excludePeople || [];
     return of(Object.keys(this.personsObject)).pipe(
       map(people => people.filter(person => {
-        return person.match(new RegExp('.*' + str + '.*')) && !excludePeople.some(excludePerson => excludePerson.trim().toUpperCase() === person);
+        return person.match(new RegExp('.*' + str + '.*')) && !excludePeople.some(excludePerson => {
+          return excludePerson.trim().toUpperCase() === person;
+        });
       }))
     );
   }

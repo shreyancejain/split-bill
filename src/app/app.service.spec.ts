@@ -40,4 +40,22 @@ describe('AppService', () => {
       done();
     });
   });
+
+  it('should add settlement', (done: DoneFn) => {
+    const people = ['ROHIT', 'RAHUL'];
+    people.forEach(person => service.addPerson(person));
+    const byPerson = people.shift();
+    const amount = 200;
+
+    service.settleUpBalance(amount, byPerson, people[0]);
+
+    const addedTransactions = service.getAllTransactions(); // get an Observable
+    addedTransactions.subscribe(transactions => {
+      expect(transactions[0].by).toBe(byPerson);
+      expect(transactions[0].amount).toBe(amount);
+      expect(transactions[0].toPerson).toEqual(people[0]);
+      expect(transactions[0].isSettleUp).toBeTruthy();
+      done();
+    });
+  });
 });

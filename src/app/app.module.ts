@@ -9,7 +9,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PersonListComponent } from './person-list/person-list.component';
-import {MatInputModule, MatTableModule, MatSelectModule, MatChipsModule, MatIconModule, MatAutocompleteModule, MatButtonModule, MatSnackBarModule, MatListModule, MatProgressSpinnerModule, MatSlideToggleModule} from '@angular/material';
+import {MatInputModule, MatTableModule, MatSelectModule, MatChipsModule,
+   MatIconModule, MatAutocompleteModule, MatButtonModule, MatSnackBarModule,
+   MatListModule, MatProgressSpinnerModule, MatSlideToggleModule} from '@angular/material';
 
 
 

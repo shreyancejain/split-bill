@@ -12,8 +12,16 @@ describe('PersonListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, RouterTestingModule, MatSnackBarModule, BrowserAnimationsModule,
-        MatListModule],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        RouterTestingModule,
+        MatSnackBarModule,
+        BrowserAnimationsModule,
+        MatListModule
+      ],
       declarations: [PersonListComponent]
     })
       .compileComponents();
