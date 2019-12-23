@@ -1,6 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BalanceSheetComponent } from './balance-sheet.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatAutocompleteModule, MatChipsModule, MatTableModule } from '@angular/material';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('BalanceSheetComponent', () => {
   let component: BalanceSheetComponent;
@@ -8,9 +13,11 @@ describe('BalanceSheetComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BalanceSheetComponent ]
+      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule, BrowserAnimationsModule, MatAutocompleteModule, MatChipsModule, MatTableModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      declarations: [BalanceSheetComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
